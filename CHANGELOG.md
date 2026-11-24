@@ -4,8 +4,13 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-11-23
+
 ### Added
 - This changelog, included in the published package.
+
+### Security
+- Upgrade `@modelcontextprotocol/sdk` to 1.32.2 and `zod` to 4.6.7, and refresh the lockfile, clearing every `npm audit` advisory (1 critical, 8 high, 2 moderate) in the SDK, zod, and their transitive dependencies.
 
 ## [1.3.1] - 2026-11-23
 
@@ -50,7 +55,8 @@ All notable changes to this project are documented in this file. The format is b
 ### Added
 - First public release: an MCP server for the Red Hat Support Case Management API with 16 tools to list, read, create, update, and close cases, manage comments, attachments, and notified users, and read external tracker updates and business hours.
 
-[Unreleased]: https://github.com/sleepytimeshon/mcp-redhat-support/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/sleepytimeshon/mcp-redhat-support/compare/v1.3.2...HEAD
+[1.3.2]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.2
 [1.3.1]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.1
 [1.3.0]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.0
 [1.2.3]: https://www.npmjs.com/package/mcp-redhat-support/v/1.2.3

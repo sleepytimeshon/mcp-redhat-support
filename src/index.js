@@ -103,7 +103,7 @@ const paginationSchema = {
 
 const server = new McpServer({
   name: "mcp-redhat-support",
-  version: "1.3.1",
+  version: "1.3.2",
 });
 
 // --- Tools ---
