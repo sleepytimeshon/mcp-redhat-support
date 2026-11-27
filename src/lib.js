@@ -401,6 +401,16 @@ export function bodyToMarkdown(text) {
   return /<\/?[a-z][^>]*>/i.test(s) ? htmlToMarkdown(s) : s.replace(/\r\n/g, "\n").trim();
 }
 
+// Some product names already end with their version ("OpenShift Container Platform 4.19" with
+// version "4.19"); add the version only when the name lacks it
+export function productLabel(product, version) {
+  const p = oneLine(product);
+  const v = oneLine(version);
+  if (!v) return p;
+  if (!p) return v;
+  return p.toLowerCase().endsWith(v.toLowerCase()) ? p : `${p} ${v}`;
+}
+
 export function caseUrl(caseNumber) {
   return `${PORTAL_CASE_URL}/${caseNumber}`;
 }
@@ -417,7 +427,7 @@ export function formatCaseList(data, { start = 0, accountNumbers } = {}) {
   if (cases.length === 0) return `No cases found${scope}.`;
   const lines = cases.map((c) => {
     const bits = [c.status, c.severity].filter(Boolean).join(", ");
-    const product = [c.product, c.version].filter(Boolean).join(" ");
+    const product = productLabel(c.product, c.version);
     const tail = [product, c.contactName && `contact ${c.contactName}`, c.lastModifiedDate && `updated ${date(c.lastModifiedDate)}`].filter(Boolean).join(" · ");
     return `- **${c.caseNumber}** [${bits}] ${oneLine(c.summary)}${tail ? ` — ${tail}` : ""}`;
   });
@@ -458,7 +468,7 @@ export function formatCase(c, { comments } = {}) {
     ["Status", c.status],
     ["Severity", c.severity],
     ["Type", c.caseType],
-    ["Product", [c.product, c.version].filter(Boolean).join(" ")],
+    ["Product", productLabel(c.product, c.version)],
     ["Account", c.accountNumberRef],
     ["Contact", [c.contactName, c.contactSSOName && `(${c.contactSSOName})`].filter(Boolean).join(" ")],
     ["Owner", c.ownerId],

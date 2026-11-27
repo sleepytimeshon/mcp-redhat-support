@@ -4,6 +4,11 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-11-27
+
+### Fixed
+- Case listings and details repeated the product version when the product name already ends with it (for example "OpenShift Container Platform 4.19 4.19").
+
 ## [2.0.0] - 2026-11-27
 
 ### Added
@@ -84,7 +89,8 @@ All notable changes to this project are documented in this file. The format is b
 ### Added
 - First public release: an MCP server for the Red Hat Support Case Management API with 16 tools to list, read, create, update, and close cases, manage comments, attachments, and notified users, and read external tracker updates and business hours.
 
-[Unreleased]: https://github.com/sleepytimeshon/mcp-redhat-support/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/sleepytimeshon/mcp-redhat-support/compare/v2.0.1...HEAD
+[2.0.1]: https://www.npmjs.com/package/mcp-redhat-support/v/2.0.1
 [2.0.0]: https://www.npmjs.com/package/mcp-redhat-support/v/2.0.0
 [1.3.2]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.2
 [1.3.1]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.1

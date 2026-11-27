@@ -290,6 +290,16 @@ describe("formatters", () => {
     assert.equal(lib.formatAccount({ accountNumber: 1, name: "Example Corp", hasTAM: true, isPartner: false, escalationsInLast30DaysApi: 0 }), "# Account 1: Example Corp\n**Flags:** Has TAM\n**Escalations in the last 30 days:** 0");
   });
 
+  it("adds the product version only when the name lacks it", () => {
+    assert.equal(lib.productLabel("Red Hat Enterprise Linux", "9.4"), "Red Hat Enterprise Linux 9.4");
+    assert.equal(lib.productLabel("OpenShift Container Platform 4.19", "4.19"), "OpenShift Container Platform 4.19");
+    assert.equal(lib.productLabel("Red Hat Customer Portal Current Version", "Current Version"), "Red Hat Customer Portal Current Version");
+    assert.equal(lib.productLabel("", "9"), "9");
+    assert.equal(lib.productLabel("Product", undefined), "Product");
+    const out = lib.formatCaseList({ totalCount: 1, cases: [{ ...CASE, product: "OpenShift Container Platform 4.19", version: "4.19" }] }, { accountNumbers: ["1"] });
+    assert.match(out, / — OpenShift Container Platform 4\.19 · contact/);
+  });
+
   it("paginates by characters", () => {
     assert.match(lib.paginate("abcdef", 0, 4, "t"), /abcd\n\n\[truncated: showing chars 0-4 of 6\. Call again with offset=4/);
     assert.match(lib.paginate("abc", 9, 4, "t"), /offset 9 is past the end/);

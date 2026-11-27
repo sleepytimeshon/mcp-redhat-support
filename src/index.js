@@ -63,7 +63,7 @@ const textResult = (text) => ({ content: [{ type: "text", text }] });
 
 const server = new McpServer({
   name: "mcp-redhat-support",
-  version: "2.0.0",
+  version: "2.0.1",
 });
 
 // --- Accounts ---
