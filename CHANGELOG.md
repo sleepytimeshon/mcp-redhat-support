@@ -4,6 +4,35 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-27
+
+### Added
+- `getAccount`, `listAccountContacts`, and `getCaseGroupUsers` tools, for an account's support flags, its contacts' SSO usernames (for `addNotifiedUsers` and `createCase`), and case group members.
+- `listCases` filters by product, version, keyword, case type, creator, and created and modified dates, sorts by several fields, and pages with `maxResults` (up to 200) and `startAt`.
+- `getCaseComments` and `getExternalTrackerUpdates` filter by date; `getCaseAttachments` can include deleted attachments.
+- `updateCase` changes case type, product and version, contact, case group, hostname, OpenShift cluster, and escalation, and reopens a closed case with a reason.
+- `uploadAttachment` uploads files larger than 5 GB in parts.
+- Offline unit tests (`test/unit.mjs`), run by `npm test`.
+
+### Changed
+- All case, comment, attachment, tracker, and business-hours tools use the Support API's v3 endpoints; every v1 endpoint they used is deprecated. The notified-user tools still use v1, which has no v3 replacement.
+- Tool output is Markdown for a language model instead of raw API JSON: empty fields and duplicated API holder objects are dropped, comment HTML is converted, and a case with comments is a fraction of its former size.
+- `getCase` includes the case's comments, newest first, and labels private comments (visible to Red Hat associates only).
+- `listCases`, `createCase`, and the account tools default to the token user's own account; other accounts are listed only when named. `listCases` lists open cases unless `includeClosed` is set, and its record paging parameter is now `startAt`, freeing `offset` for character pagination like every other tool.
+- `uploadAttachment` reads files only from the attachment directory (`REDHAT_SUPPORT_ATTACHMENT_DIR`, default `~/redhat-support-attachments`), and `downloadAttachment` writes only under it, never overwriting without `overwrite: true`. Transfers use v3 presigned URLs without sending the Red Hat token.
+- `deleteAttachment` takes the attachment UUID from `getCaseAttachments`.
+- `addCaseComment` drops `isPublic`, which the v3 API does not accept, and adds `doNotChangeStatus`.
+- API errors are reported as one readable line, and a rejected cached access token is exchanged again once.
+- API clients, validation, and formatters moved to `src/lib.js`; comment HTML conversion is in `src/html.js`, shared with mcp-redhat-knowledge.
+
+### Fixed
+- `listCases` returned no cases: the deprecated v1 filter endpoint answers every query with zero results.
+- `listCases` sent `searchString`, which the API ignores; keyword search now uses `keyword`.
+- Tool descriptions gave severity and status examples the API rejects (`3 (Normal)`, `Open`, `Waiting on Customer`, `Waiting on Red Hat`); values are now validated against the API's lists, and common spellings such as `3 (Normal)` or `High` map to them.
+- Case numbers, comment IDs, attachment UUIDs, and usernames are validated before they are put in a request URL.
+- Every Red Hat API request times out after 30 seconds (10 minutes for attachment downloads and uploads) instead of waiting indefinitely on a stalled endpoint.
+- The pagination `offset` parameter is described in characters, not bytes.
+
 ## [1.3.2] - 2026-11-23
 
 ### Added
@@ -55,7 +84,8 @@ All notable changes to this project are documented in this file. The format is b
 ### Added
 - First public release: an MCP server for the Red Hat Support Case Management API with 16 tools to list, read, create, update, and close cases, manage comments, attachments, and notified users, and read external tracker updates and business hours.
 
-[Unreleased]: https://github.com/sleepytimeshon/mcp-redhat-support/compare/v1.3.2...HEAD
+[Unreleased]: https://github.com/sleepytimeshon/mcp-redhat-support/compare/v2.0.0...HEAD
+[2.0.0]: https://www.npmjs.com/package/mcp-redhat-support/v/2.0.0
 [1.3.2]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.2
 [1.3.1]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.1
 [1.3.0]: https://www.npmjs.com/package/mcp-redhat-support/v/1.3.0
